@@ -15,14 +15,23 @@ function ECKey(d, compressed) {
   assert(d.signum() > 0, 'Private key must be greater than 0')
   assert(d.compareTo(ECKey.curve.n) < 0, 'Private key must be less than the curve order')
 
-  var Q = ECKey.curve.G.multiply(d)
-
   this.d = d
-  this.pub = new ECPubKey(Q, compressed)
+  this.compressed = compressed
 }
 
 // Constants
 ECKey.curve = secp256k1
+
+Object.defineProperty(ECKey.prototype, 'pub', {
+  get: function () {
+    if (!this.__pub && this.d) {
+      var Q = ECKey.curve.G.multiply(this.d)
+      this.__pub = new ECPubKey(Q, this.compressed)
+    }
+
+    return this.__pub
+  }
+})
 
 // Static constructors
 ECKey.fromWIF = function(string) {
