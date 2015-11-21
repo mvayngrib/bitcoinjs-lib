@@ -1,5 +1,5 @@
 {
-  "name": "bitcoinjs-lib",
+  "name": "@tradle/bitcoinjs-lib",
   "version": "1.5.7",
   "description": "Client-side Bitcoin JavaScript library",
   "main": "./src/index.js",
