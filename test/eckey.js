@@ -123,6 +123,15 @@ describe('ECKey', function () {
       assert.equal(ECKey.makeRandom(true).pub.compressed, true)
       assert.equal(ECKey.makeRandom(false).pub.compressed, false)
     })
+
+    it('supports async', function () {
+      var stub = { randombytes: function (size, cb) { cb(null, exBuffer) } }
+      var ProxiedECKey = proxyquire('../src/eckey', stub)
+
+      ProxiedECKey.makeRandom(undefined, undefined, function (err, privKey) {
+        assert.equal(privKey.toWIF(), exWIF)
+      })
+    })
   })
 
   describe('signing', function () {

@@ -55,17 +55,36 @@ ECKey.fromWIF = function (string) {
   return new ECKey(d, compressed)
 }
 
-ECKey.makeRandom = function (compressed, rng) {
+ECKey.makeRandom = function (compressed, rng, callback) {
   rng = rng || randomBytes
 
-  var buffer = rng(32)
-  typeForce('Buffer', buffer)
-  assert.equal(buffer.length, 32, 'Expected 256-bit Buffer from RNG')
+  var async = !!callback
+  return rand(32, function (err, buffer) {
+    if (err) {
+      if (async) return callback(err)
+      else throw err
+    }
 
-  var d = BigInteger.fromBuffer(buffer)
-  d = d.mod(ECKey.curve.n)
+    typeForce('Buffer', buffer)
+    assert.equal(buffer.length, 32, 'Expected 256-bit Buffer from RNG')
 
-  return new ECKey(d, compressed)
+    var d = BigInteger.fromBuffer(buffer)
+    d = d.mod(ECKey.curve.n)
+
+    var key = new ECKey(d, compressed)
+    if (callback) callback(null, key)
+
+    return key
+  })
+
+  function rand (size, rCallback) {
+    // async
+    if (!async) return rCallback(null, rng(size))
+
+    rng(size, function (err, bytes) {
+      rCallback(err, bytes)
+    })
+  }
 }
 
 // Export functions
