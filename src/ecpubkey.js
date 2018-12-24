@@ -8,13 +8,17 @@ var Address = require('./address')
 var ecurve = require('ecurve')
 var secp256k1 = ecurve.getCurveByName('secp256k1')
 
+function isPoint (val) {
+  return val instanceof ecurve.Point
+}
+
 function ECPubKey (Q, compressed) {
   if (compressed === undefined) {
     compressed = true
   }
 
-  typeForce('Point', Q)
-  typeForce('Boolean', compressed)
+  typeForce(isPoint, Q)
+  typeForce(typeForce.Boolean, compressed)
 
   this.compressed = compressed
   this.Q = Q

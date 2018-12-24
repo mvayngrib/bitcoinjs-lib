@@ -3,9 +3,13 @@ var typeForce = require('typeforce')
 
 var BigInteger = require('bigi')
 
+function isBigInt (val) {
+  return val instanceof BigInteger
+}
+
 function ECSignature (r, s) {
-  typeForce('BigInteger', r)
-  typeForce('BigInteger', s)
+  typeForce(isBigInt, r)
+  typeForce(isBigInt, s)
 
   this.r = r
   this.s = s

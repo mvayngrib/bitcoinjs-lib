@@ -8,10 +8,14 @@ var ECSignature = require('./ecsignature')
 var ZERO = new Buffer([0])
 var ONE = new Buffer([1])
 
+function isBigInt (val) {
+  return val instanceof BigInteger
+}
+
 // https://tools.ietf.org/html/rfc6979#section-3.2
 function deterministicGenerateK (curve, hash, d, checkSig) {
-  typeForce('Buffer', hash)
-  typeForce('BigInteger', d)
+  typeForce(typeForce.Buffer, hash)
+  typeForce(isBigInt, d)
 
   // FIXME: remove/uncomment for 2.0.0
   //  typeForce('Function', checkSig)

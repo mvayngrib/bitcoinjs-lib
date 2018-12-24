@@ -27,7 +27,7 @@ function findBIP32NetworkByVersion (version) {
 function HDNode (K, chainCode, network) {
   network = network || networks.bitcoin
 
-  typeForce('Buffer', chainCode)
+  typeForce(typeForce.Buffer, chainCode)
 
   assert.equal(chainCode.length, 32, 'Expected chainCode length of 32, got ' + chainCode.length)
   assert(network.bip32, 'Unknown BIP32 constants for network')
@@ -58,7 +58,7 @@ HDNode.HIGHEST_BIT = 0x80000000
 HDNode.LENGTH = 78
 
 HDNode.fromSeedBuffer = function (seed, network) {
-  typeForce('Buffer', seed)
+  typeForce(typeForce.Buffer, seed)
 
   assert(seed.length >= 16, 'Seed should be at least 128 bits')
   assert(seed.length <= 64, 'Seed should be at most 512 bits')

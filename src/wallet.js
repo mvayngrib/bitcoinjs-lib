@@ -311,9 +311,9 @@ Wallet.prototype.setUnspentOutputs = function (unspents) {
       index = unspent.outputIndex
     }
 
-    typeForce('String', txId)
-    typeForce('Number', index)
-    typeForce('Number', unspent.value)
+    typeForce(typeForce.String, txId)
+    typeForce(typeForce.Number, index)
+    typeForce(typeForce.Number, unspent.value)
 
     assert.equal(txId.length, 64, 'Expected valid txId, got ' + txId)
     assert.doesNotThrow(function () {
@@ -323,7 +323,7 @@ Wallet.prototype.setUnspentOutputs = function (unspents) {
 
     // FIXME: remove branch in 2.0.0
     if (unspent.confirmations !== undefined) {
-      typeForce('Number', unspent.confirmations)
+      typeForce(typeForce.Number, unspent.confirmations)
     }
 
     var txHash = bufferutils.reverse(new Buffer(txId, 'hex'))

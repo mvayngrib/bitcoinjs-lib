@@ -65,7 +65,7 @@ ECKey.makeRandom = function (compressed, rng, callback) {
       else throw err
     }
 
-    typeForce('Buffer', buffer)
+    typeForce(typeForce.Buffer, buffer)
     assert.equal(buffer.length, 32, 'Expected 256-bit Buffer from RNG')
 
     var d = BigInteger.fromBuffer(buffer)

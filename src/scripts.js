@@ -8,6 +8,10 @@ var curve = ecurve.getCurveByName('secp256k1')
 var ECSignature = require('./ecsignature')
 var Script = require('./script')
 
+function isScript (val) {
+  return val instanceof Script
+}
+
 function isCanonicalPubKey (buffer) {
   if (!Buffer.isBuffer(buffer)) return false
 
@@ -133,7 +137,7 @@ function isNullDataOutput (script) {
 }
 
 function classifyOutput (script) {
-  typeForce('Script', script)
+  typeForce(isScript, script)
 
   if (isPubKeyHashOutput(script)) {
     return 'pubkeyhash'
@@ -151,7 +155,7 @@ function classifyOutput (script) {
 }
 
 function classifyInput (script, allowIncomplete) {
-  typeForce('Script', script)
+  typeForce(isScript, script)
 
   if (isPubKeyHashInput(script)) {
     return 'pubkeyhash'
@@ -177,7 +181,7 @@ function pubKeyOutput (pubKey) {
 
 // OP_DUP OP_HASH160 {pubKeyHash} OP_EQUALVERIFY OP_CHECKSIG
 function pubKeyHashOutput (hash) {
-  typeForce('Buffer', hash)
+  typeForce(typeForce.Buffer, hash)
 
   return Script.fromChunks([
     ops.OP_DUP,
@@ -190,7 +194,7 @@ function pubKeyHashOutput (hash) {
 
 // OP_HASH160 {scriptHash} OP_EQUAL
 function scriptHashOutput (hash) {
-  typeForce('Buffer', hash)
+  typeForce(typeForce.Buffer, hash)
 
   return Script.fromChunks([
     ops.OP_HASH160,
@@ -220,14 +224,14 @@ function multisigOutput (m, pubKeys) {
 
 // {signature}
 function pubKeyInput (signature) {
-  typeForce('Buffer', signature)
+  typeForce(typeForce.Buffer, signature)
 
   return Script.fromChunks([signature])
 }
 
 // {signature} {pubKey}
 function pubKeyHashInput (signature, pubKey) {
-  typeForce('Buffer', signature)
+  typeForce(typeForce.Buffer, signature)
 
   return Script.fromChunks([signature, pubKey.toBuffer()])
 }

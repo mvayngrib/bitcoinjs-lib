@@ -129,6 +129,7 @@ describe('ECKey', function () {
       var ProxiedECKey = proxyquire('../src/eckey', stub)
 
       ProxiedECKey.makeRandom(undefined, undefined, function (err, privKey) {
+        assert.equal(err, undefined)
         assert.equal(privKey.toWIF(), exWIF)
       })
     })

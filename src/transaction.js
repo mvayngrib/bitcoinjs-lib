@@ -9,6 +9,10 @@ var Address = require('./address')
 var ECSignature = require('./ecsignature')
 var Script = require('./script')
 
+function isScript (val) {
+  return val instanceof Script
+}
+
 function Transaction () {
   this.version = 1
   this.locktime = 0
@@ -130,10 +134,10 @@ Transaction.prototype.addInput = function (hash, index, sequence, script) {
     hash = hash.getHash()
   }
 
-  typeForce('Buffer', hash)
-  typeForce('Number', index)
-  typeForce('Number', sequence)
-  typeForce('Script', script)
+  typeForce(typeForce.Buffer, hash)
+  typeForce(typeForce.Number, index)
+  typeForce(typeForce.Number, sequence)
+  typeForce(isScript, script)
 
   assert.equal(hash.length, 32, 'Expected hash length of 32, got ' + hash.length)
 
@@ -166,8 +170,8 @@ Transaction.prototype.addOutput = function (scriptPubKey, value) {
     scriptPubKey = scriptPubKey.toOutputScript()
   }
 
-  typeForce('Script', scriptPubKey)
-  typeForce('Number', value)
+  typeForce(isScript, scriptPubKey)
+  typeForce(typeForce.Number, value)
 
   // Add the output and return the output's index
   return (this.outs.push({
@@ -219,9 +223,9 @@ Transaction.prototype.hashForSignature = function (inIndex, prevOutScript, hashT
     prevOutScript = tmp
   }
 
-  typeForce('Number', inIndex)
-  typeForce('Script', prevOutScript)
-  typeForce('Number', hashType)
+  typeForce(typeForce.Number, inIndex)
+  typeForce(isScript, prevOutScript)
+  typeForce(typeForce.Number, hashType)
 
   assert(inIndex >= 0, 'Invalid vin index')
   assert(inIndex < this.ins.length, 'Invalid vin index')
@@ -327,8 +331,8 @@ Transaction.prototype.toHex = function () {
 }
 
 Transaction.prototype.setInputScript = function (index, script) {
-  typeForce('Number', index)
-  typeForce('Script', script)
+  typeForce(typeForce.Number, index)
+  typeForce(isScript, script)
 
   this.ins[index].script = script
 }

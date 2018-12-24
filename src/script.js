@@ -5,8 +5,8 @@ var typeForce = require('typeforce')
 var opcodes = require('./opcodes')
 
 function Script (buffer, chunks) {
-  typeForce('Buffer', buffer)
-  typeForce('Array', chunks)
+  typeForce(typeForce.Buffer, buffer)
+  typeForce(typeForce.Array, chunks)
 
   this.buffer = buffer
   this.chunks = chunks
@@ -63,7 +63,7 @@ Script.fromBuffer = function (buffer) {
 }
 
 Script.fromChunks = function (chunks) {
-  typeForce('Array', chunks)
+  typeForce(typeForce.Array, chunks)
 
   var bufferSize = chunks.reduce(function (accum, chunk) {
     // data chunk

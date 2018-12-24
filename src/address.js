@@ -14,7 +14,7 @@ function findScriptTypeByVersion (version) {
 }
 
 function Address (hash, version) {
-  typeForce('Buffer', hash)
+  typeForce(typeForce.Buffer, hash)
 
   assert.strictEqual(hash.length, 20, 'Invalid hash length')
   assert.strictEqual(version & 0xff, version, 'Invalid version byte')
